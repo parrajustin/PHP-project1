@@ -2,13 +2,17 @@
 
 $size = 10;
 $strategies = array("Smart", "Random", "Sweep");
-$
 
-echo "{\"size\":" + 
+// print all the way up till the strategies array
+printf( "{\"size\": %s, \"strategies\": [", strval($size));
 
-echo {"size": 10,
-    "strategies": ["Smart", "Random", "Sweep"],
-        "ships": [
-	      {"name": "Aircraft carrier", "size": 5}, {"name": "Battleship", "size": 4}, {"name": "Frigate", "size": 3}, {"name": "Submarine", "size": 3}, {"name": "Minesweeper", "size": 2}]}
+for($i = 0; $i < sizeof($strategies); $i++) {
+       if( $i != 0) {
+       	   printf(" ,");
+       }
+       printf("\"%s\"", strval($strategies[$i]));
+}
+
+printf("], \"ships\": [output ships here]}");
 
 ?>

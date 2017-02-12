@@ -1,0 +1,5 @@
+# ignore me
+sudo service php7.0-fpm stop
+sudo service php7.0-fpm start
+sudo service nginx restart
+# /usr/share/nginx/www
