@@ -15,7 +15,7 @@ $db = new flat('../data');
 $db->doc('setting');
 $db->doc('setting')->insert(array(
   "size" => strval(10),
-  "strategies" => json_encode(array("Smart", "Random", "Sweep", "test"))),
+  "strategies" => json_encode(array("Smart", "Random", "Sweep", "test")),
   "ships" => json_encode(array(
     array("name" => "Aircraft carrier", "size" => 5),
     array("name" => "Battleship", "size" => 4),
