@@ -18,15 +18,18 @@ $db->doc('setting')->insert(array(
   "strategies" => join(',', array("Smart", "Random", "Sweep", "test")),
   "ships" => join(',', array("battleship", "frigate", "submarine", "minesweeper", "aircraft carrier")), ));
 
-$data = $db->doc('setting')->find("10", "size");
-echo join(',', array_keys($db->doc('setting')->find("10", "size")));
 
-$size = $data['size'];
-$strategies = explode(',', $data['strategies']);
+//TODO: $data = $db->doc('setting')->findall();
+$data = $db->doc('setting')->find("10", "size"); // set data to the query looking for the most recent settings insert
+// echo join(',', array_keys($db->doc('setting')->find("10", "size")));
+
+$size = $data['size']; // from data get the size
+$strategies = explode(',', $data['strategies']); // from data turn strategies string "a,b,c,d" = array("a", "b", "c", "d")
 
 // print all the way up till the strategies array
 printf( "{\"size\": %s, \"strategies\": [", strval($size));
 
+// print out all strategies
 for($i = 0; $i < sizeof($strategies); $i++) {
        if( $i != 0) {
        	   printf(" ,");
@@ -34,6 +37,7 @@ for($i = 0; $i < sizeof($strategies); $i++) {
        printf("\"%s\"", strval($strategies[$i]));
 }
 
+// TODO: print out all ships like strategies
 printf("], \"ships\": [output ships here]}");
 
 ?>
