@@ -22,15 +22,15 @@ $db->doc('setting')->insert(array(
     array("name" => "Frigate", "size" => 3),
     array("name" => "Submarine", "size" => 3),
     array("name" => "Minesweeper", "size" => 2),
-  ), JSON_FORCE_OBJECT),
+  )),
 ));
 
 
 //TODO: $data = $db->doc('setting')->findall();
 $data = $db->doc('setting')->find("10", "size"); // set data to the query looking for the most recent settings insert
-echo join(',', array_keys($db->doc('setting')->find("10", "size")));
-
-$data['strategies'] = explode(',', $data['strategies']); // from data turn strategies string "a,b,c,d" = array("a", "b", "c", "d")
+$data['strategies'] = json_decode($data['strategies']); // from data turn strategies string "a,b,c,d" = array("a", "b", "c", "d")
 $data['ships'] = json_decode($data['ships']);
-echo "hi";
+unset($data['id']);
+
+echo json_encode($data);
 ?>
