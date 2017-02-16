@@ -15,14 +15,14 @@ require_once('../common/flat.php');
 $db = new flat('../data');
 $db->doc('setting')->insert(array(
   "size" => strval(10),
-  "strategies" => join(',', array("Smart", "Random", "Sweep")),
+  "strategies" => join(',', array("Smart", "Random", "Sweep", "test")),
   "ships" => join(',', array("battleship", "frigate", "submarine", "minesweeper", "aircraft carrier")), ));
 
-//echo join(',', $db->doc('setting')->find("10", "size"));
-// echo join(',', array_keys($db->doc('setting')->find("10", "size")));
+$data = $db->doc('setting')->find("10", "size");
+echo join(',', array_keys($db->doc('setting')->find("10", "size")));
 
-$size = 10;
-$strategies = array("Smart", "Random", "Sweep");
+$size = $data['size'];
+$strategies = explode(',', $data['strategies']);
 
 // print all the way up till the strategies array
 printf( "{\"size\": %s, \"strategies\": [", strval($size));
