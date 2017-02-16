@@ -32,5 +32,5 @@ echo join(',', array_keys($db->doc('setting')->find("10", "size")));
 
 $data['strategies'] = explode(',', $data['strategies']); // from data turn strategies string "a,b,c,d" = array("a", "b", "c", "d")
 $data['ships'] = json_decode($data['ships']);
-
+echo "hi";
 ?>
