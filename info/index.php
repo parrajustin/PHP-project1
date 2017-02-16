@@ -13,15 +13,13 @@ error_reporting(E_ALL ^ E_NOTICE);
 var_dump(require("../common/flat.php"));
 require_once('../common/flat.php');
 $db = new flat('../data');
-$db->doc('test')->insert(array(
-    "a" => "be",
-    "b" => "the",
-    "c" => "best",))->insert(array(
-      "a" => "the",
-      "b" => "best",
-      "c" => "be",));
+$db->doc('setting'))->insert(array(
+  "size" => strval(10),
+  "strategies" => join(',', array("Smart", "Random", "Sweep")),
+  "ships" => join(',', array("battleship", "frigate", "submarine", "minesweeper", "aircraft carrier")), ));
 
-echo join(',', $db->doc('test')->find("be", "a"));
+//echo join(',', $db->doc('setting')->find("10", "size"));
+// echo join(',', array_keys($db->doc('setting')->find("10", "size")));
 
 $size = 10;
 $strategies = array("Smart", "Random", "Sweep");
