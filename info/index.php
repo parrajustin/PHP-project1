@@ -15,9 +15,7 @@ require_once('../common/default.php');
 $setup = new check();
 $setup->run();
 
-$db = $GLOBALS['db'];
-echo array_keys($GLOBALS['db']);
-//$db = new flat('../data');
+$db = new flat('../data');
 $db->doc('setting');
 
 //TODO: $data = $db->doc('setting')->findall();
