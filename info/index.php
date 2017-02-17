@@ -11,20 +11,14 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 <?php
 require_once('../common/flat.php');
-$db = new flat('../data');
-$db->doc('setting');
-$db->doc('setting')->insert(array(
-  "size" => strval(10),
-  "strategies" => json_encode(array("Smart", "Random", "Sweep", "test")),
-  "ships" => json_encode(array(
-    array("name" => "Aircraft carrier", "size" => 5),
-    array("name" => "Battleship", "size" => 4),
-    array("name" => "Frigate", "size" => 3),
-    array("name" => "Submarine", "size" => 3),
-    array("name" => "Minesweeper", "size" => 2),
-  )),
-));
+require_once('../common/default.php');
+$setup = new check();
+$setup->run();
 
+$db = $GLOBALS['db'];
+echo array_keys($GLOBALS['db']);
+//$db = new flat('../data');
+$db->doc('setting');
 
 //TODO: $data = $db->doc('setting')->findall();
 $data = $db->doc('setting')->find("10", "size"); // set data to the query looking for the most recent settings insert

@@ -28,6 +28,15 @@ class flat {
     $this->table = $table_name;
     return $this;
   }
+
+  public function count() {
+    $meta = $this->meta();
+
+    if( is_null($meta) )
+      return 0;
+    else
+      return $meta['count'];
+  }
   
   public function insert($input) {
     
@@ -131,7 +140,7 @@ class flat {
     if( !array_key_exists($table, $this->meta_data) ) {
       $path = $this->dir . $table . '/meta.php';
       if( !file_exists($path) )
-        throw new Exception("metadata table $table not found!");
+        return NULL;
 
       $this->meta_data[$table] = $this->read($path, false);
     }
