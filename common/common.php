@@ -46,7 +46,8 @@ class check {
           array("name" => "Submarine", "row" => 3, "col" => 2, "dir" => true),
           array("name" => "Minesweeper", "row" => 2, "col" => 2, "dir" => true),
         )),
-        "shots" => "[]",
+        "computer_shots" => json_encode(array()),
+        "player_shots" => json_encode(array()),
         "gameOver" => false,
         "lastShot" => "-1,-1",
       ));
