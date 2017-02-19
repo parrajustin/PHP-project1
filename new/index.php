@@ -121,7 +121,7 @@
       exit();
     }
 
-    $ship_storage[$temp[0]] = array("col" => $temp[1], "row" => $temp[2], "dir" => $temp[3] ); // add this ship to storage to pass on
+    $ship_storage[$temp[0]] = array("name" => $temp[0], "col" => $temp[1], "row" => $temp[2], "dir" => $temp[3] ); // add this ship to storage to pass on
     unset($ship_names[array_search($temp[0], $ship_names)]); // get rid of ship in ship names so we can't place it twice
   }
 
@@ -138,8 +138,13 @@
   }
 
   $pid = uniqid();
+  $db->doc('games'); // set db pointer to the games table
+  $pids = ["a"];
+  while( sizeof($pids) != 0) $pids = $db->find($pid, "pid"); // make sure this pid is unique
+
   $ship_checker->reset(); // get rid of checker so that we may make one for the computer's ships
   $comp_ship_storage = array();
+
   foreach ($ship_storage as $key => $value) {
     $comp_ship_storage[$key] = array();
 
@@ -151,7 +156,6 @@
     $comp_ship_storage[$key]['row'] = mt_rand(1, $data['size']);
     $comp_ship_storage[$key]['dir'] = mt_rand(0,1) == 1;
   }
-
   foreach ($comp_ship_storage as $key => $value) {
     while(!$ship_checker->place($key, $comp_ship_storage[$key])) {
       $comp_ship_storage[$key]['dir'] = mt_rand(0,1) == 1;
@@ -159,6 +163,17 @@
       $comp_ship_storage[$key]['row'] = mt_rand(1, $data['size'] - (!$comp_ship_storage[$key]['dir']? $ship_checker->ship_info[$key] - 1: 0));
     }
   }
+
+  // create the array to insert into the database
+  $db_game_insert = array(
+    "pid" => $pid,
+    "strategy" => $_GET['strategy'],
+    "player" => json_encode(array_values($ship_storage)),
+    "computer" => json_encode(array_values($comp_ship_storage)),
+    "shots" => "[]",
+  );
+
+  $db->insert($db_game_insert); // insert this game into the database
 
   echo json_encode(array(
     "response" => true,
