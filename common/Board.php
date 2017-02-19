@@ -1,4 +1,5 @@
 <?php
+/*Contains 2d array that acts as the board where the ships will be placed*/
 class Borad{
 	var $board= array(array(0,0,0,0,0,0,0,0,0,0),array(0,0,0,0,0,0,0,0,0,0),
 			array(0,0,0,0,0,0,0,0,0,0),array(0,0,0,0,0,0,0,0,0,0),
@@ -9,7 +10,7 @@ class Borad{
 
 	function insert($String){
 		$parts=explode(",", $String);
-		 
+			
 		switch ($parts[0]){
 			case 'Aircraft carrier': $this->Aircraft($parts[1],$parts[2],$parts[3]); break;
 			case 'Battleship': $this->Battleship($parts[1],$parts[2],$parts[3]); break;
@@ -18,7 +19,7 @@ class Borad{
 			case 'Minesweeper': $this->MineSweep($parts[1],$parts[2],$parts[3]); break;
 			default:  echo 'Error'; $this->isValid=false; break;
 		}
-		 
+			
 	}
 
 	function Aircraft($x,$y,$dir){
@@ -63,7 +64,7 @@ class Borad{
 			}
 		}
 	}
-	
+
 
 	function Vertical($x,$y,$s){
 		for($i=$y-1;$i<$s;$i++){
@@ -72,7 +73,7 @@ class Borad{
 			}else{
 				echo "Error";
 				$this->isValid=false;
-				 
+					
 			}
 		}
 	}

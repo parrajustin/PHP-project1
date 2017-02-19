@@ -49,3 +49,5 @@ flycheck_*.el
 .settings/*
 .settings/
 *~
+
+data/*
