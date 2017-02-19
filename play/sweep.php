@@ -27,8 +27,8 @@ class Sweep {
    */
   public function __construct($game_arry) {
     $this->player_ships = $game_arry['player'];
-    $this->$computer_ships = $game_arry['computer'];
-    $this->$shots = $game_arry['shots'];
+    $this->computer_ships = $game_arry['computer'];
+    $this->shots = $game_arry['shots'];
   }
 
   /**
