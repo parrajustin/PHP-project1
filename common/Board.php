@@ -63,6 +63,7 @@ class Borad{
 			}
 		}
 	}
+	
 
 	function Vertical($x,$y,$s){
 		for($i=$y-1;$i<$s;$i++){
