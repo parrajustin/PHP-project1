@@ -219,7 +219,8 @@ error_reporting(E_ALL ^ E_NOTICE);
     "strategy" => $_GET['strategy'],
     "player" => json_encode(array_values($ship_storage)),
     "computer" => json_encode(array_values($comp_ship_storage)),
-    "shots" => "[]",
+    "computer_shots" => json_encode(array()),
+    "player_shots" => json_encode(array()),
     "gameOver" => false,
     "lastShot" => "-1,-1",
   );
