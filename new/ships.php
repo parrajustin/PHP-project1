@@ -59,30 +59,6 @@ class Ships {
       return false;
 
     foreach ($this->ships as $value) {
-      // //if both are horizontal or vertical
-      // if( $value['dir'] === $ship_info['dir'] ) {
-      //   if( $value['dir'] && $value['row'] === $ship_info['row'] ) { //if horizontal
-      //     if( $value['col'] > $ship_info['col'] && $ship_info['col'] + $ship_info['size'] - 1 >= $value['col'] )
-      //       return false;
-      //     else if( $value['col'] <= $ship_info['col'] && $value['col'] + $value['size'] - 1 >= $ship_info['col'] )
-      //       return false;
-      //   } else if( !$value['dir'] && $value['col'] === $ship_info['col'] ){ //if vertical
-      //     if( $value['row'] > $ship_info['row'] && $ship_info['row'] + $ship_info['size'] - 1 >= $value['row'] )
-      //       return false;
-      //     else if( $value['row'] <= $ship_info['row'] && $value['row'] + $value['size'] - 1 >= $ship_info['row'] )
-      //       return false;
-      //   }
-      // }
-      //
-      // else {
-      //   if( $ship_info['dir'] ) { // if the current ship is horizontal
-      //
-      //   } else { // if the current ship is vertical
-      //
-      //   }
-      // }  ALL ABOVE WAS JUST A WASTE OF MY TIME
-      // rect 1 = value
-      // rect 2 = (!$value['dir']? $value['size'] - 1: 1)
       if( $value['col'] < $ship_info['col'] + ($ship_info['dir']? $ship_info['size']: 1) &&
        $value['col'] + ($value['dir']? $value['size']: 1) > $ship_info['col'] &&
        $value['row'] < $ship_info['row'] + (!$value['dir']? $value['size']: 1) &&
