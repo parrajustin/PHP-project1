@@ -3,18 +3,38 @@
 /*  So we can handle exceptions here */
 //class Exception extends \Exception {}
 
+/** A flat file storage implementation */
 class flat {
+  /**
+   *   The directory to the database
+   *   @var string
+   */
   private $dir = ""; // directory to database
+  /**
+   *   The current table we are working in
+   *   @var string
+   */
   private $table = ""; // current table name
+  /**
+   *   An array the contains all the meta data that we have worked on
+   *   @var array
+   */
   private $meta_data = array(); // contains the metadata for all operated tables
+  /**
+   *   What can be returned
+   *   @var array
+   */
   private $returnable = array();
 
   /**
-   *  Constructor creates the database
+   *   Creates the flat file database
+   *   @method __construct
+   *   @param  string      $path    the path to the database folder
+   *   @param  string      $db_name default database name
    */
   public function __construct($path, $db_name = 'default') {
     $this->dir = $path . (substr(strval($path), -1) === '/'? '' : '/') . $db_name . (substr(strval($db_name), -1) === '/'? '' : '/'); // substr checks if the last char is already a /
-    
+
     //Can the directory even exist?
     if( !is_dir($this->dir) ) {
       if( !mkdir($this->dir, 0744, true) )
@@ -24,11 +44,25 @@ class flat {
     }
   }
 
+  /**
+   *   Chooses the table to work in, Once set all instances of the object will be in that table
+   *   @method doc
+   *   @param  string $table_name the name of the table to work in
+   *   @return flat             returns this object so that this method can be chained, or NULL if table_name isn't a string
+   */
   public function doc($table_name) {
+    if( !is_string($table_name) )
+      return NULL;
+
     $this->table = $table_name;
     return $this;
   }
 
+  /**
+   *   Returns the number of elements in the table
+   *   @method count
+   *   @return int the count of elements
+   */
   public function count() {
     $meta = $this->meta();
 
@@ -37,19 +71,27 @@ class flat {
     else
       return $meta['count'];
   }
-  
+
+  /**
+   *   inserts the key value array into the database
+   *   @method insert
+   *   @param  array $input array to insert into the table
+   *   @return flat        returns this object so that this method may be chained
+   */
   public function insert($input) {
-    
+
+    if( $this->table === "" )
+      throw new Exception("Table isn't set");
     if( !is_array($input) )
       throw new Exception('Can only input key-value pairs!');
     if( array_key_exists('id', $input) ) // you can't have an object with the key id
       throw new Exception('The key id is a reserved keyword');
-    
+
     $table = $this->table; // quick way to access the table
     $id = 0; // the id of the insert
     $meta = null; // data of the table, holds count and id and indexes
     $update_keys = 0;
-    
+
     if( !is_dir($this->dir . $table) ) { // does this table even exist?
       if( !mkdir($this->dir . $table, 0777) )
         throw new Exception('Failed to make directory, permission failed');
@@ -72,7 +114,7 @@ class flat {
 
     $input['id'] = $id; // we need to have an identifier
     ksort($input);
-    
+
     if( $update_keys === 0 && !(array_keys($input) === $meta['keys']) ) { // if the input being inserted doesn't have the right keys
       $temp_input_keys = strval(join(",", array_keys($input)));
       $temp_meta_keys = strval(join(",", $meta['keys']));
@@ -87,7 +129,7 @@ class flat {
       if( !array_key_exists($value, $meta['summary']) )
         $meta['summary'][$value] = array();
 
-      
+
       $meta['summary'][$value][$input[$value]] = $input['id'];
     }
 
@@ -103,6 +145,13 @@ class flat {
     return $this; // continue chainability
   }
 
+  /**
+   *   Finds a value in the key field
+   *   @method find
+   *   @param  string $value the value to find
+   *   @param  string $field the key field to search for the value
+   *   @return array        the item
+   */
   public function find($value, $field = 'id') {
     $meta = $this->meta();
 
@@ -113,6 +162,12 @@ class flat {
     return $this->get($item_id);
   }
 
+  /**
+   *   gets a certain element by its id
+   *   @method get
+   *   @param  int $id the id to look for
+   *   @return array     the item your looking for
+   */
   private function get($id) {
     $table = $this->table;
 
@@ -122,11 +177,23 @@ class flat {
     return null;
   }
 
+  /**
+   *   Reads data from path
+   *   @method read
+   *   @param  string $path the path to the file to read
+  *   @return object        returns the data that was read
+   */
   private function read($path) {
     $contents = file_get_contents($path);
     return unserialize(substr($contents, 16));
   }
-  
+
+  /**
+   *   Writes the to a file
+   *   @method write
+   *   @param  string $path the string path of where to write to
+   *   @param  object $obj  what to write, it will be serialized
+   */
   private function write($path, $obj) {
     file_put_contents($path, '<?php exit(); ?>' . serialize($obj), LOCK_EX);
   }
@@ -149,7 +216,3 @@ class flat {
   }
 }
 ?>
-
-
-
-

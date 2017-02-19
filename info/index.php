@@ -1,11 +1,13 @@
 
 <?php
+// SETUP DATABASE
 require_once('../common/flat.php');
-require_once('../common/default.php');
+require_once('../common/common.php');
 $setup = new check();
 $setup->run();
-
 $db = new flat('../data');
+// ===== END SETUP
+
 $db->doc('setting');
 
 //TODO: $data = $db->doc('setting')->findall()[0];
