@@ -58,6 +58,9 @@ class Ships {
     if( !$ship_info['dir'] && $ship_info['row'] + $ship_info['size'] - 1 > $this->settings['size'])
       return false;
 
+    ///////////////////////////////////
+    // Checks if any boats intersect //
+    ///////////////////////////////////
     foreach ($this->ships as $value) {
       if( $value['col'] < $ship_info['col'] + ($ship_info['dir']? $ship_info['size']: 1) &&
        $value['col'] + ($value['dir']? $value['size']: 1) > $ship_info['col'] &&

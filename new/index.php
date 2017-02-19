@@ -222,6 +222,8 @@
     "player" => json_encode(array_values($ship_storage)),
     "computer" => json_encode(array_values($comp_ship_storage)),
     "shots" => "[]",
+    "gameOver" => false,
+    "lastShot" => "-1,-1",
   );
 
   $db->insert($db_game_insert); // insert this game into the database
