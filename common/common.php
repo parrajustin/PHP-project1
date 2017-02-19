@@ -5,8 +5,6 @@ require_once('../common/flat.php');
  *   Sets up the environment by adding the base values into the flat files
  */
 class check {
-
-
   /**
    *   setsup the flat file databases
    *   @method run
@@ -49,6 +47,8 @@ class check {
           array("name" => "Minesweeper", "row" => 2, "col" => 2, "dir" => true),
         )),
         "shots" => "[]",
+        "gameOver" => false,
+        "lastShot" => "-1,-1",
       ));
     }
 
