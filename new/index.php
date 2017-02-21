@@ -2,10 +2,10 @@
 <head>
 </head>
 <body>
-  <?php
-  ini_set('display_errors', 1);
-  error_reporting(E_ALL ^ E_NOTICE);
-  ?>
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL ^ E_NOTICE);
+?>
 </body>
 </html>
 
@@ -150,7 +150,7 @@
       exit();
     }
 
-    $ship_storage[$temp[0]] = array("name" => $temp[0], "col" => $temp[1], "row" => $temp[2], "dir" => $temp[3] ); // add this ship to storage to pass on
+    $ship_storage[$temp[0]] = array("name" => $temp[0], "col" => $temp[1], "row" => $temp[2], "dir" => $temp[3], "sunk" => 0 ); // add this ship to storage to pass on
     /***********************************************************************************
      *   Here on the unset we are deleting the entry from the ship_names array so that *
      *   we don't place a ship with the same name twice                                *
@@ -192,7 +192,6 @@
 
   foreach ($ship_storage as $key => $value) { // Create a copy of the ship_storage array for the computers
     $comp_ship_storage[$key] = array();
-
     foreach ($value as $key2 => $value2) {
       $comp_ship_storage[$key][$key2] = $value2;
     }
@@ -221,11 +220,11 @@
     "strategy" => $_GET['strategy'],
     "player" => json_encode(array_values($ship_storage)),
     "computer" => json_encode(array_values($comp_ship_storage)),
-    "shots" => "[]",
+    "computer_shots" => json_encode(array()),
+    "player_shots" => json_encode(array()),
     "gameOver" => false,
     "lastShot" => "-1,-1",
   );
-
   $db->insert($db_game_insert); // insert this game into the database
 
   //////////////////////////////////////////
