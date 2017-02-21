@@ -15,7 +15,7 @@ class Random {
 	 */
 	private $computer_ships = Null;
 	/**
-	 *    Holds the shots fired in a key value pairs with "2,3" => "0,1" where 2 = x, 3 = y, 0 = human hasn't fired here and 1 = computer fired here
+	 *    Holds the shots fired in a key value pairs with "2,3" => "0,1" where 2 = x, 3 = y and 1 = computer fired here
 	 *   @var [type]
 	 */
 	private $shots = Null;
@@ -38,11 +38,11 @@ class Random {
 	 *   @method nextShot
 	 *   @return string   x,y coordinates where the computer should fire next
 	 */
-	 
+
 	public function nextShot() {
 		$x=rand(1,10);
 		$y=rand(1,10);
-		 
+			
 		//Check if the coordinates are valid//
 		$isValid=false;
 		while($isValid==false){
@@ -62,7 +62,7 @@ class Random {
 			$isValid=true;
 			$this->shots[$x.",".$y]=1;
 		}
-		 
+			
 		return $x.",".$y;
 	}
 }
