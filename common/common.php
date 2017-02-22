@@ -165,6 +165,15 @@ class game {
   }
 
   /**
+   *   Return the current game's pid
+   *   @method get_pid
+   *   @return string  the game pid
+   */
+  public function get_pid() {
+    return $this->pid;
+  }
+
+  /**
    *   Inserts the array into the game table
    *   @method insert_game
    *   @param  array      $insertee the array to be inserted
@@ -282,10 +291,14 @@ class game {
    *   Update the game table
    *   @method update_game
    *   @param  string      $pid   the pid identifier
-   *   @param  array      $array array to update the game 
+   *   @param  array      $array array to update the game
    */
   public function update_game($pid, $array) {
-
+    foreach ($array as $key => &$value) {
+      if( is_array($value) )
+        $value = json_encode($value);
+    }
+    $this->database->update($pid, "pid", $array);
   }
 }
 ?>

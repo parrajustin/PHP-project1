@@ -214,5 +214,27 @@ class flat {
 
     return $this->meta_data[$table];
   }
+
+  /**
+   *   Updates an entry in the given database
+   *   @method update
+   *   @param  string $id    the id of the field
+   *   @param  string $field the field for id
+   *   @param  array $array key value pair to update array
+   */
+  public function update($id, $field, $array) {
+    $holder = $this->find($id, $field);
+      echo json_encode($holder);
+      echo "<br/>
+
+      </br/>";
+    foreach ($array as $key => $value) {
+      if( array_key_exists($key, $holder) )
+        $holder[$key] = $value;
+    }
+    echo json_encode($holder);
+
+    $this->write($this->dir . $this->table . '/' . strval($holder['id']) . '.php', $holder); // create new file
+  }
 }
 ?>

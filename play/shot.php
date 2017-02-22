@@ -58,7 +58,7 @@ class shot_check {
 
     // Didn't hit anything so return the array
     if( $hit_ship === false ) {
-      return json_encode(array(
+      return (array(
         "x" => $col,
         "y" => $row,
         "isHit" => $hit_ship,
@@ -89,7 +89,18 @@ class shot_check {
       }
     }
 
-    return json_encode(array(
+    $shot_temp = $this->game->get_player_shots();
+    $shot_temp[$col . "," . $row] = 1;
+
+    $update_arry = array(
+      "gameOver" => $is_win_condition,
+      ($is_player? "player_shots" : "computer_shots") => $shot_temp,
+      ($is_player? "computer" : "player") => $ship_storage,
+    );
+
+    $this->game->update_game($this->game->get_pid(), $update_arry);
+
+    return (array(
       "x" => $col,
       "y" => $row,
       "isHit" => $hit_ship,

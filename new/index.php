@@ -131,7 +131,8 @@ foreach ($get_ships as $value) {
     exit();
   }
 
-  $ship_storage[$temp[0]] = array("name" => $temp[0], "col" => $temp[1], "row" => $temp[2], "dir" => $temp[3], "sunk" => 0, "size" => $game->get_ship_size($temp[0]) ); // add this ship to storage to pass on
+
+  $ship_storage[$temp[0]] = array("name" => $temp[0], "col" => $temp[1], "row" => $temp[2], "dir" => $temp[3], "sunk" => 0, "size" => $game->get_ship_size($temp[0]), ); // add this ship to storage to pass on
   /***********************************************************************************
    *   Here on the unset we are deleting the entry from the ship_names array so that *
    *   we don't place a ship with the same name twice                                *
