@@ -1,7 +1,6 @@
 
 <?php
 // SETUP DATABASE
-require_once('../common/flat.php');
 require_once('../common/common.php');
 $game = new game();
 // ===== END SETUP

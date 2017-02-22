@@ -1,14 +1,3 @@
-<html>
-<head>
-</head>
-<body>
-  <?php
-  ini_set('display_errors', 1);
-  error_reporting(E_ALL ^ E_NOTICE);
-  ?>
-</body>
-</html>
-
 <?php
 
 /////////////////////////////////////////////////////////////////////
@@ -31,7 +20,6 @@ if( !isset($_GET['ships']) || strlen($_GET['ships']) === 0) {
 ////////////////////////////
 // SET UP INITAL DATABASE //
 ////////////////////////////
-require_once('../common/flat.php');
 require_once('../common/common.php');
 require_once('ships.php');
 $game = new game();
@@ -131,7 +119,8 @@ foreach ($get_ships as $value) {
     exit();
   }
 
-  $ship_storage[$temp[0]] = array("name" => $temp[0], "col" => $temp[1], "row" => $temp[2], "dir" => $temp[3], "sunk" => 0 ); // add this ship to storage to pass on
+
+  $ship_storage[$temp[0]] = array("name" => $temp[0], "col" => $temp[1], "row" => $temp[2], "dir" => $temp[3], "sunk" => 0, "size" => $game->get_ship_size($temp[0]), ); // add this ship to storage to pass on
   /***********************************************************************************
    *   Here on the unset we are deleting the entry from the ship_names array so that *
    *   we don't place a ship with the same name twice                                *
@@ -186,8 +175,8 @@ foreach ($ship_storage as $key => $value) { // Create a copy of the ship_storage
 foreach ($comp_ship_storage as $key => $value) {
   while(!$ship_checker->place($key, $comp_ship_storage[$key])) {
     $comp_ship_storage[$key]['dir'] = mt_rand(0,1) == 1;
-    $comp_ship_storage[$key]['col'] = mt_rand(1, $game->get_board_size() - ($comp_ship_storage[$key]['dir']? $ship_checker->ship_info[$key] - 1: 0));
-    $comp_ship_storage[$key]['row'] = mt_rand(1, $game->get_board_size() - (!$comp_ship_storage[$key]['dir']? $ship_checker->ship_info[$key] - 1: 0));
+    $comp_ship_storage[$key]['col'] = mt_rand(1, $game->get_board_size() - ($comp_ship_storage[$key]['dir']? $comp_ship_storage[$key]['size'] - 1: 0));
+    $comp_ship_storage[$key]['row'] = mt_rand(1, $game->get_board_size() - (!$comp_ship_storage[$key]['dir']? $comp_ship_storage[$key]['size'] - 1: 0));
   }
 }
 
@@ -199,8 +188,8 @@ $db_game_insert = array(
   "strategy" => $_GET['strategy'],
   "player" => json_encode(array_values($ship_storage)),
   "computer" => json_encode(array_values($comp_ship_storage)),
-  "computer_shots" => json_encode(array()),
-  "player_shots" => json_encode(array()),
+  "computer_shots" => json_encode(array("-1,-1" => 1)),
+  "player_shots" => json_encode(array("-1,-1" => 1)),
   "gameOver" => false,
   "lastShot" => "-1,-1",
 );
