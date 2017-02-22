@@ -56,46 +56,38 @@ class shot_check {
       }
     }
 
-    // Didn't hit anything so return the array
-    if( $hit_ship === false ) {
-      return (array(
-        "x" => $col,
-        "y" => $row,
-        "isHit" => $hit_ship,
-        "isSunk" => false,
-        "isWin" => false,
-        "ship" => array()
-      ));
-    }
-
     //////////////////////////
     // Edit the details now //
     //////////////////////////
-    $ship_storage[$ship_key]['sunk'] += 1;
-    $is_win_condition = true;
+    $is_win_condition = false;
     $ship_sunken_array = array();
-    if( $ship_storage[$ship_key]['sunk'] === $ship_storage[$ship_key]['size'] ) { // the ship has been sunk
+    if( !is_null($ship_key) ) { // has a ship been hit?
+      $ship_storage[$ship_key]['sunk'] += 1;
+      if( !($ship_storage[$ship_key]['sunk'] === $ship_storage[$ship_key]['size']) ) // has the ship been destroyed?
+        goto skip_hit;
+
       for($i = 0; $i < $ship_storage[$ship_key]['size']; $i++) { // for the sunken ship add the array col/row for the output
-        array_push($ship_sunken_array, (!$ship_storage[$ship_key]['dir']? $i: 0) + $ship_storage[$ship_key]['col']);
-        array_push($ship_sunken_array, ($ship_storage[$ship_key]['dir']? $i: 0) + $ship_storage[$ship_key]['row']);
+        array_push($ship_sunken_array, ($ship_storage[$ship_key]['dir']? $i: 0) + $ship_storage[$ship_key]['col']);
+        array_push($ship_sunken_array, (!$ship_storage[$ship_key]['dir']? $i: 0) + $ship_storage[$ship_key]['row']);
       }
 
       // check if the game is over
-      foreach ($ship_storage as $key => $value) {
+      foreach ($ship_storage as $value) {
         if( $value['sunk'] !== $value['size']) {
-          $is_win_condition = false;
-          break;
+          goto skip_hit;
         }
       }
+      $is_win_condition = true;
     }
+    skip_hit:
 
     $shot_temp = $this->game->get_player_shots();
     $shot_temp[$col . "," . $row] = 1;
 
     $update_arry = array(
       "gameOver" => $is_win_condition,
-      ($is_player? "player_shots" : "computer_shots") => $shot_temp,
-      ($is_player? "computer" : "player") => $ship_storage,
+      ($is_player? "player_shots" : "computer_shots")=> $shot_temp,
+      (!is_null($ship_key)? ($is_player? "computer" : "player") : "a") => $ship_storage,
     );
 
     $this->game->update_game($this->game->get_pid(), $update_arry);

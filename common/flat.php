@@ -224,15 +224,10 @@ class flat {
    */
   public function update($id, $field, $array) {
     $holder = $this->find($id, $field);
-      echo json_encode($holder);
-      echo "<br/>
-
-      </br/>";
     foreach ($array as $key => $value) {
       if( array_key_exists($key, $holder) )
         $holder[$key] = $value;
     }
-    echo json_encode($holder);
 
     $this->write($this->dir . $this->table . '/' . strval($holder['id']) . '.php', $holder); // create new file
   }

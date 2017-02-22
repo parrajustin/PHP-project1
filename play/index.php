@@ -82,8 +82,14 @@ if( $shot_col <= 0 || $shot_col > $game->get_board_size() || $shot_row <= 0 || $
 ////////////////////////////////////
 $shot_board = new shot_check($game);
 $out = $shot_board->check($shot_col, $shot_row, 1);
+echo "<br />;";
+var_dump($out);
 if( is_null($out) ) {
-
+  echo json_encode(array(
+    "response" => false,
+    "reason" => "Invalid shot position, $shot_col,$shot_row",
+  ));
+  exit();
 }
 
 echo $out;

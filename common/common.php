@@ -295,9 +295,14 @@ class game {
    */
   public function update_game($pid, $array) {
     foreach ($array as $key => &$value) {
-      if( is_array($value) )
+      if( !array_key_exists($key, $this->game_data) ) { // delete from update if it isn't in game_data
+        unset($array[$key]);
+        continue;
+      }
+      if( is_array($value) ) // turn arrays to strings
         $value = json_encode($value);
     }
+
     $this->database->update($pid, "pid", $array);
   }
 }
