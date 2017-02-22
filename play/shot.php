@@ -129,7 +129,7 @@ class shot_check {
       "x" => $col,
       "y" => $row,
       "isHit" => $hit_ship,
-      "isSunk" => $ship_storage[$ship_key]['sunk'] === $ship_storage[$ship_key]['size'],
+      "isSunk" => sizeof($ship_sunken_array) > 0,
       "isWin" => $is_win_condition,
       "ship" => $ship_sunken_array
     ));

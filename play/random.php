@@ -33,16 +33,16 @@ class Random {
 	 */
 	public function nextShot() {
 
-		$col = rand(1, $game->get_board_size());
-		$row = rand(1, $game->get_board_size());
+		$col = rand(1, $this->game->get_board_size());
+		$row = rand(1, $this->game->get_board_size());
 
 		//Check if the coordinates are valid//
 		$isValid = false;
 		while($isValid == false){
 			// Check if the shot exists
 			if( $this->game->shot_exists($col, $row, 0) ){
-				$col = rand(1, $game->get_board_size());
-				$row = rand(1, $game->get_board_size());
+				$col = rand(1, $this->game->get_board_size());
+				$row = rand(1, $this->game->get_board_size());
 				continue;
 			}
 
