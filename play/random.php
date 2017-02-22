@@ -20,24 +20,56 @@ class Random {
    */
   private $shots = Null;
 
-  /**
-   *   Sets up this swep class
-   *   @method __construct
-   *   @param  array      $game_arry the data from the current game
-   */
-  public function __construct($game_arry) {
-    $this->player_ships = $game_arry['player'];
-    $this->computer_ships = $game_arry['computer'];
-    $this->shots = $game_arry['shots'];
-  }
+	/**
+	 *   The game object from common
+	 *   @var game
+	 */
+	private $game = Null;
 
-  /**
-   *   Returns where the next shot should be fired
-   *   @method nextShot
-   *   @return string   x,y coordinates where the computer should fire next
-   */
-  public function nextShot() {
-    return "3,4";
-  }
+	/**
+	 *   Sets up this strategy
+	 *   @method __construct
+	 *   @param  game      $game      the main game object
+	 *   @param  array      $game_arry the specific game array
+	 */
+	public function __construct($game, $game_arry) {
+		$this->game = $game;
+		$this->shots = $game_arry['computer_shots'];
+	}
+
+
+
+	/**
+	 *   Returns where the next shot should be fired
+	 *   @method nextShot
+	 *   @return string   x,y coordinates where the computer should fire next
+	 */
+
+	public function nextShot() {
+		$x=rand(1,$game->get_board_size());
+		$y=rand(1,$game->get_board_size());
+
+		//Check if the coordinates are valid//
+		$isValid=false;
+		while($isValid==false){
+			///First check if the shots array is empty//
+			//If it is add the shot to the array and exit the while//
+			if(empty($this->shots)){
+				$this->shots[$x.",".$y]=1;
+				break;
+			}
+			//If the shot already exist generate a second shot and check again//
+			if(array_key_exists($x.",".$y,$this->shots) ){
+				$x=rand(1,10);
+				$y=rand(1,10);
+				continue;
+			}
+			//If the shot is valid add it to the shots array and exit the while//
+			$isValid=true;
+			$this->shots[$x.",".$y]=1;
+		}
+
+		return $x.",".$y;
+	}
 }
 ?>
