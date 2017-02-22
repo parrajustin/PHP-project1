@@ -25,10 +25,10 @@ class Random {
    *   @method __construct
    *   @param  array      $game_arry the data from the current game
    */
-  public function __construct($game_arry) {
+  public function __construct($settings, $game_arry) {
     $this->player_ships = $game_arry['player'];
     $this->computer_ships = $game_arry['computer'];
-    $this->shots = $game_arry['shots'];
+    $this->shots = $game_arry['computer_shots'];
   }
 
   /**
