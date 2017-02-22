@@ -21,13 +21,19 @@ class Random {
 	private $shots = Null;
 
 	/**
-	 *   Sets up this swep class
-	 *   @method __construct
-	 *   @param  array      $game_arry the data from the current game
+	 *   The game object from common
+	 *   @var game
 	 */
-	public function __construct($game_arry) {
-		// $this->player_ships = $game_arry['player'];
-		//$this->computer_ships = $game_arry['computer'];
+	private $game = Null;
+
+	/**
+	 *   Sets up this strategy
+	 *   @method __construct
+	 *   @param  game      $game      the main game object
+	 *   @param  array      $game_arry the specific game array
+	 */
+	public function __construct($game, $game_arry) {
+		$this->game = $game;
 		$this->shots = $game_arry['computer_shots'];
 	}
 
@@ -40,9 +46,9 @@ class Random {
 	 */
 
 	public function nextShot() {
-		$x=rand(1,10);
-		$y=rand(1,10);
-			
+		$x=rand(1,$game->get_board_size());
+		$y=rand(1,$game->get_board_size());
+
 		//Check if the coordinates are valid//
 		$isValid=false;
 		while($isValid==false){
@@ -62,7 +68,7 @@ class Random {
 			$isValid=true;
 			$this->shots[$x.",".$y]=1;
 		}
-			
+
 		return $x.",".$y;
 	}
 }
