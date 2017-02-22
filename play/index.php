@@ -80,4 +80,10 @@ if( $shot_col <= 0 || $shot_col > $game->get_board_size() || $shot_row <= 0 || $
 ////////////////////////////////////
 // Check if the shot hit anything //
 ////////////////////////////////////
-$shot_board_player = new shot_check($game);
+$shot_board = new shot_check($game);
+$out = $shot_board->check($shot_col, $shot_row, 0);
+if( is_null($out) ) {
+
+}
+
+echo $out;

@@ -20,7 +20,7 @@ class game {
    *   The stored game data for a pid
    *   @var array
    */
-  private $game_date = null;
+  private $game_data = null;
 
   /**
    *   Game Pid holder
@@ -67,21 +67,21 @@ class game {
         "pid" => 0,
         "strategy" => "Random",
         "player" => json_encode(array(
-          array("name" => "Aircraft carrier", "row" => 5, "col" => 2, "dir" => true, "sunk" => 0),
-          array("name" => "Battleship", "row" => 4, "col" => 2, "dir" => true, "sunk" => 0),
-          array("name" => "Frigate", "row" => 3, "col" => 2, "dir" => true, "sunk" => 0),
-          array("name" => "Submarine", "row" => 3, "col" => 2, "dir" => true, "sunk" => 0),
-          array("name" => "Minesweeper", "row" => 2, "col" => 2, "dir" => true, "sunk" => 0),
+          array("name" => "Aircraft carrier", "row" => 5, "col" => 2, "dir" => true, "sunk" => 0, "size" => 0),
+          array("name" => "Battleship", "row" => 4, "col" => 2, "dir" => true, "sunk" => 0, "size" => 0),
+          array("name" => "Frigate", "row" => 3, "col" => 2, "dir" => true, "sunk" => 0, "size" => 0),
+          array("name" => "Submarine", "row" => 3, "col" => 2, "dir" => true, "sunk" => 0, "size" => 0),
+          array("name" => "Minesweeper", "row" => 2, "col" => 2, "dir" => true, "sunk" => 0, "size" => 0),
         )),
         "computer" => json_encode(array(
-          array("name" => "Aircraft carrier", "row" => 5, "col" => 2, "dir" => true, "sunk" => 0),
-          array("name" => "Battleship", "row" => 4, "col" => 2, "dir" => true, "sunk" => 0),
-          array("name" => "Frigate", "row" => 3, "col" => 2, "dir" => true, "sunk" => 0),
-          array("name" => "Submarine", "row" => 3, "col" => 2, "dir" => true, "sunk" => 0),
-          array("name" => "Minesweeper", "row" => 2, "col" => 2, "dir" => true, "sunk" => 0),
+          array("name" => "Aircraft carrier", "row" => 5, "col" => 2, "dir" => true, "sunk" => 0, "size" => 0),
+          array("name" => "Battleship", "row" => 4, "col" => 2, "dir" => true, "sunk" => 0, "size" => 0),
+          array("name" => "Frigate", "row" => 3, "col" => 2, "dir" => true, "sunk" => 0, "size" => 0),
+          array("name" => "Submarine", "row" => 3, "col" => 2, "dir" => true, "sunk" => 0, "size" => 0),
+          array("name" => "Minesweeper", "row" => 2, "col" => 2, "dir" => true, "sunk" => 0, "size" => 0),
         )),
-        "computer_shots" => json_encode(array()),
-        "player_shots" => json_encode(array()),
+        "computer_shots" => json_encode(array("-1,-1" => 1)),
+        "player_shots" => json_encode(array("-1,-1" => 1)),
         "gameOver" => false,
         "lastShot" => "-1,-1",
       ));
@@ -196,10 +196,12 @@ class game {
     $this->pid = $pid;
     $game_data = $this->database->find($_GET['pid'], 'pid');
 
-    $game_data['player'] = json_decode($game_data['player']);
-    $game_data['computer'] = json_decode($game_data['computer']);
-    $game_data['computer_shots'] = json_decode($game_data['computer_shots']);
-    $game_data['player_shots'] = json_decode($game_data['player_shots']);
+    $game_data['player'] = json_decode($game_data['player'], True);
+    $game_data['computer'] = json_decode($game_data['computer'], True);
+    $game_data['computer_shots'] = json_decode($game_data['computer_shots'], True);
+    $game_data['player_shots'] = json_decode($game_data['player_shots'], True);
+
+    $this->game_data = $game_data;
 
     if( sizeof($game_data) == 0 )
       return Null;
@@ -212,7 +214,7 @@ class game {
    *   @return [type]       [description]
    */
   public function get_strategy() {
-    return $this->game_date['strategy'];
+    return $this->game_data['strategy'];
   }
 
   /**
@@ -221,7 +223,7 @@ class game {
    *   @return array             array of computer ships
    */
   public function get_player_ships() {
-    return $this->game_date['player'];
+    return $this->game_data['player'];
   }
 
   /**
@@ -230,7 +232,7 @@ class game {
    *   @return array             array of computer ships
    */
   public function get_computer_ships() {
-    return $this->game_date['computer'];
+    return $this->game_data['computer'];
   }
 
   /**
@@ -239,7 +241,7 @@ class game {
    *   @return array           array of player shots
    */
   public function get_player_shots() {
-    return $this->game_date['player_shots'];
+    return $this->game_data['player_shots'];
   }
 
   /**
@@ -248,7 +250,23 @@ class game {
    *   @return array           array of player shots
    */
   public function get_computer_shots() {
-    return $this->game_date['computer_shots'];
+    return $this->game_data['computer_shots'];
+  }
+
+  /**
+   *   Check if the shot exists
+   *   @method check_shot
+   *   @param  bool    $is_player is this for the player or computer
+   *   @param  int    $col       the column of the shot
+   *   @param  int     $row       the row of the shot
+   *   @return bool                did this shot already happen
+   */
+  public function shot_exists($col, $row, $is_player) {
+    if( $is_player && sizeof($this->game_data['player_shots']) !== 0)
+      return array_key_exists($col . "," . $row, $this->game_data['player_shots']);
+    else if( !$is_player && sizeof($this->game_data['computer_shots']) !== 0)
+      return array_key_exists($col . "," . $row, $this->game_data['computer_shots']);
+    return false;
   }
 
   /**
@@ -257,7 +275,17 @@ class game {
    *   @return bool    if the game is in the game over state
    */
   public function game_over() {
-    return $this->game_date['gameOver'];
+    return $this->game_data['gameOver'];
+  }
+
+  /**
+   *   Update the game table
+   *   @method update_game
+   *   @param  string      $pid   the pid identifier
+   *   @param  array      $array array to update the game 
+   */
+  public function update_game($pid, $array) {
+
   }
 }
 ?>
