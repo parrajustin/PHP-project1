@@ -1,13 +1,3 @@
-<html>
-<head>
-</head>
-<body>
-  <?php
-  ini_set('display_errors', 1);
-  error_reporting(E_ALL ^ E_NOTICE);
-  ?>
-</body>
-</html>
 
 <?php
 
@@ -82,7 +72,7 @@ if( $shot_col <= 0 || $shot_col > $game->get_board_size() || $shot_row <= 0 || $
 ////////////////////////////////////
 $shot_board = new shot_check($game); // setup shot_board checker
 $out_player = $shot_board->check($shot_col, $shot_row, 1); //check if this shot is acceptable and get the data from it
-$out_computer = array();
+$out_computer = null;
 if( is_null($out_player) ) { // if null is returned the shot is Invalid
   echo json_encode(array(
     "response" => false,
@@ -91,7 +81,7 @@ if( is_null($out_player) ) { // if null is returned the shot is Invalid
   exit();
 }
 
-if( !$out['isWin'] ) { // if the player didn't win have the computer go through its strategy
+if( !$out_player['isWin'] ) { // if the player didn't win have the computer go through its strategy
   $strat = new Random($game);
   $returned_shot = Null;
 
@@ -102,6 +92,7 @@ if( !$out['isWin'] ) { // if the player didn't win have the computer go through 
 }
 
 echo json_encode(array(
+  "response" => true,
   "ack_shot" => $out_player,
-  "shot" => $out_computer,
+  "shot" => (is_null($out_computer)? json_decode("{}") : $out_computer),
 ));

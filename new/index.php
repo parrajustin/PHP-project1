@@ -1,14 +1,3 @@
-<html>
-<head>
-</head>
-<body>
-<?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL ^ E_NOTICE);
-?>
-</body>
-</html>
-
 <?php
 
 /////////////////////////////////////////////////////////////////////
@@ -186,8 +175,8 @@ foreach ($ship_storage as $key => $value) { // Create a copy of the ship_storage
 foreach ($comp_ship_storage as $key => $value) {
   while(!$ship_checker->place($key, $comp_ship_storage[$key])) {
     $comp_ship_storage[$key]['dir'] = mt_rand(0,1) == 1;
-    $comp_ship_storage[$key]['col'] = mt_rand(1, $game->get_board_size() - ($comp_ship_storage[$key]['dir']? $ship_checker->ship_info[$key] - 1: 0));
-    $comp_ship_storage[$key]['row'] = mt_rand(1, $game->get_board_size() - (!$comp_ship_storage[$key]['dir']? $ship_checker->ship_info[$key] - 1: 0));
+    $comp_ship_storage[$key]['col'] = mt_rand(1, $game->get_board_size() - ($comp_ship_storage[$key]['dir']? $comp_ship_storage[$key]['size'] - 1: 0));
+    $comp_ship_storage[$key]['row'] = mt_rand(1, $game->get_board_size() - (!$comp_ship_storage[$key]['dir']? $comp_ship_storage[$key]['size'] - 1: 0));
   }
 }
 
