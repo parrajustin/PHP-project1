@@ -36,35 +36,50 @@ class shot_check {
     // Store the necessary ships into storage //
     ////////////////////////////////////////////
     $ship_storage = Null;
-    if( $is_player )
+    if( $is_player ) // if this is for the player then get the computer's ships
       $ship_storage = $this->game->get_computer_ships();
-    else
+    else // if this is for the computer get the player's ships
       $ship_storage = $this->game->get_player_ships();
 
     //////////////////////////////////////
     // Check every ship for a collision //
     //////////////////////////////////////
+    /**
+     *   Was a ship hit?
+     *   @var bool
+     */
     $hit_ship = false;
-    $ship_details = Null;
+    /**
+     *   This is the key of the hit ship for the shipstorage
+     *   @var array
+     */
     $ship_key = Null;
     foreach ($ship_storage as $key => $value) {
-      if( $this->shot_collision($value, $col, $row) ) {
+      if( $value['sunk'] !== $value['size'] && $this->shot_collision($value, $col, $row) ) { // ship not already sunk and did the bullet hit the ship?
         $hit_ship = true; // we hit the ship
-        $ship_details = $value;
         $ship_key = $key;
-        break;
+        break; // no longer needed we already iterated through the array
       }
     }
 
     //////////////////////////
     // Edit the details now //
     //////////////////////////
+    /**
+     *   Did who ever shot this win?
+     *   @var bool
+     */
     $is_win_condition = false;
+    /**
+     *   Edited coordinates of the sunken ship, if one was sunk
+     *   @var array
+     */
     $ship_sunken_array = array();
+
     if( !is_null($ship_key) ) { // has a ship been hit?
-      $ship_storage[$ship_key]['sunk'] += 1;
-      if( !($ship_storage[$ship_key]['sunk'] === $ship_storage[$ship_key]['size']) ) // has the ship been destroyed?
-        goto skip_hit;
+      $ship_storage[$ship_key]['sunk'] += 1; // increment ship sunk counter
+      if( !($ship_storage[$ship_key]['sunk'] === $ship_storage[$ship_key]['size']) ) // has the ship not been destroyed?
+        goto skip_hit; // if so skip to after this if statement
 
       for($i = 0; $i < $ship_storage[$ship_key]['size']; $i++) { // for the sunken ship add the array col/row for the output
         array_push($ship_sunken_array, ($ship_storage[$ship_key]['dir']? $i: 0) + $ship_storage[$ship_key]['col']);
@@ -73,25 +88,43 @@ class shot_check {
 
       // check if the game is over
       foreach ($ship_storage as $value) {
-        if( $value['sunk'] !== $value['size']) {
-          goto skip_hit;
+        if( $value['sunk'] !== $value['size']) { // is this ship not sunken?
+          goto skip_hit; // if so skip setting win condidtion to true
         }
       }
       $is_win_condition = true;
     }
-    skip_hit:
+    skip_hit: // where the goto statements move to
 
-    $shot_temp = $this->game->get_player_shots();
-    $shot_temp[$col . "," . $row] = 1;
+    /**
+     *   We need to update shot array in the database so we need to edit the shots of who ever is made the shot
+     *   @var array
+     */
+    $shot_temp = Null;
+    if( $is_player )
+      $shot_temp = $this->game->get_player_shots();
+    else
+      $shot_temp = $this->game->get_computer_shots();
+    $shot_temp[$col . "," . $row] = 1; // update the shots to include this shot
 
+    /**
+     *   The array to update the game table
+     *   @var array
+     */
     $update_arry = array(
       "gameOver" => $is_win_condition,
       ($is_player? "player_shots" : "computer_shots")=> $shot_temp,
       (!is_null($ship_key)? ($is_player? "computer" : "player") : "a") => $ship_storage,
     );
 
+    ///////////////////////////////////////////////////////////////////////
+    // This updates the game database with the update arry defined above //
+    ///////////////////////////////////////////////////////////////////////
     $this->game->update_game($this->game->get_pid(), $update_arry);
 
+    ///////////////////////////////////
+    // return this shots information //
+    ///////////////////////////////////
     return (array(
       "x" => $col,
       "y" => $row,
