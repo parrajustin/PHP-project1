@@ -14,13 +14,13 @@
 /////////////////////////////////////////////////////////////////////
 // Checks to make sure the get for both ships and strategy are set //
 /////////////////////////////////////////////////////////////////////
-if( !isset($_GET['pid']) || strlen($_GET['ships']) === 0) {
+if( !isset($_GET['pid']) || strlen($_GET['pid']) === 0) {
   echo json_encode(array(
     "response" => false,
     "reason" => "Pid not specified",
   ));
   exit();
-} else if( !isset($_GET['shot']) || strlen($_GET['strategy']) <= 2) {
+} else if( !isset($_GET['shot']) || strlen($_GET['shot']) <= 2) {
   echo json_encode(array(
     "response" => false,
     "reason" => "Shot not specified",
@@ -33,36 +33,27 @@ if( !isset($_GET['pid']) || strlen($_GET['ships']) === 0) {
 ////////////////////////////
 require_once('../common/flat.php');
 require_once('../common/common.php');
-require_once('../common/shots.php');
-$setup = new check();
-$setup->run();
-$db = new flat('../data');
+require_once('shot.php');
+$game = new game();
 
 /////////////////////////////
 // Check if pid is correct //
 /////////////////////////////
-$game_data = $db->doc('games')->find($_GET['pid'], 'pid');
-if( sizeof($game_data) === 0 ) { // Was a game found?
+$game->set_pid($_GET['pid']);
+if( sizeof($game->get_game()) === 0 ) { // Was a game found?
   echo json_encode(array(
     "response" => false,
     "reason" => "Unknown pid",
   ));
   exit();
 }
-$game_data['computer'] = json_decode($game_data['computer']);
-
-/////////////////////////
-// setup data variable //
-/////////////////////////
-$db->doc('setting');
-/**
- *   The settings data retrieved from the database, contains the following keys:
- *   "size", "strategies", "ships", "id"
- *   @var array
- */
-$data = $db->find("10", "size");
-$data['strategies'] = json_decode($data['strategies']); // json decode needs to be done to turn the strings into actuall arrays
-$data['ships'] = json_decode($data['ships']);
+if( $game->game_over() ) { // is the game already over?
+  echo json_encode(array(
+    "response" => false,
+    "reason" => "Game already done!",
+  ));
+  exit();
+}
 
 //////////////////////////////////////////
 // Now we need to check the shot itself //
@@ -78,7 +69,7 @@ if( sizeof($shot_break_down) >= 3 || sizeof($shot_break_down) <= 1) { // are the
 $shot_col = intval($shot_break_down[0]);
 $shot_row = intval($shot_break_down[1]);
 
-if( $shot_col <= 0 || $shot_col > $data['size'] || $shot_row <= 0 || $shot_row > $data['size'] ) {
+if( $shot_col <= 0 || $shot_col > $game->get_board_size() || $shot_row <= 0 || $shot_row > $game->get_board_size() ) {
   echo json_encode(array(
     "response" => false,
     "reason" => "Invalid shot position, $shot_col,$shot_row",
@@ -89,12 +80,4 @@ if( $shot_col <= 0 || $shot_col > $data['size'] || $shot_row <= 0 || $shot_row >
 ////////////////////////////////////
 // Check if the shot hit anything //
 ////////////////////////////////////
-$hit = null; // what the shot hit
-for($i = 0; $i < sizeof($game_data['computer']); $i++) {
-  if( $shot_col < $game_data['computer'][$i]['col'] + ($game_data['computer'][$i]['dir']? $game_data['computer'][$i]['size']: 1) &&
-   $shot_col + ($value['dir']? $value['size']: 1) > $game_data['computer'][$i]['col'] &&
-   $shot_row < $game_data['computer'][$i]['row'] + (!$game_data['computer'][$i]['dir']? $game_data['computer'][$i]['size']: 1) &&
-   (!$value['dir']? $value['size']: 1) + $shot_row > $game_data['computer'][$i]['row']) {
-     $hit = $game_data['computer'][$i];
-   }
-}
+$shot_board_player = new shot_check($game);

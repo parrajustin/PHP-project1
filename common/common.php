@@ -17,6 +17,18 @@ class game {
   private $SIZE = 10;
 
   /**
+   *   The stored game data for a pid
+   *   @var array
+   */
+  private $game_date = null;
+
+  /**
+   *   Game Pid holder
+   *   @var string
+   */
+  private $pid = null;
+
+  /**
    *   The avaliable strategies
    *   @var array
    */
@@ -159,6 +171,93 @@ class game {
    */
   public function insert_game($insertee) {
     $this->database->insert($insertee);
+  }
+
+  /**
+   *   Returns the game data for a specified pid
+   *   @method get_game
+   *   @param  string   $pid the pid of the game
+   *   @return array        game data
+   */
+  public function get_game($pid = "a") {
+    if( $pid === "a" )
+      $pid = $this->pid;
+    if( $this->pid === Null && $this->set_pid($pid) === Null)
+      return array();
+    return $game_data = $this->database->find($_GET['pid'], 'pid');
+  }
+
+  /**
+   *   Sets the game pid
+   *   @method set_pid
+   *   @param  string  $pid game pid
+   */
+  public function set_pid($pid) {
+    $this->pid = $pid;
+    $game_data = $this->database->find($_GET['pid'], 'pid');
+
+    $game_data['player'] = json_decode($game_data['player']);
+    $game_data['computer'] = json_decode($game_data['computer']);
+    $game_data['computer_shots'] = json_decode($game_data['computer_shots']);
+    $game_data['player_shots'] = json_decode($game_data['player_shots']);
+
+    if( sizeof($game_data) == 0 )
+      return Null;
+    return true;
+  }
+
+  /**
+   *   Returns the game strategy
+   *   @method get_strategy
+   *   @return [type]       [description]
+   */
+  public function get_strategy() {
+    return $this->game_date['strategy'];
+  }
+
+  /**
+   *   Returns the player ships from the game
+   *   @method get_player_ships
+   *   @return array             array of computer ships
+   */
+  public function get_player_ships() {
+    return $this->game_date['player'];
+  }
+
+  /**
+   *   Returns the computer ships from the game
+   *   @method get_computer_ships
+   *   @return array             array of computer ships
+   */
+  public function get_computer_ships() {
+    return $this->game_date['computer'];
+  }
+
+  /**
+   *   Return the player shots from the game
+   *   @method get_player_shots
+   *   @return array           array of player shots
+   */
+  public function get_player_shots() {
+    return $this->game_date['player_shots'];
+  }
+
+  /**
+   *   Return the computer shots from the game
+   *   @method get_player_shots
+   *   @return array           array of player shots
+   */
+  public function get_computer_shots() {
+    return $this->game_date['computer_shots'];
+  }
+
+  /**
+   *   Returns the gameover state
+   *   @method game_over
+   *   @return bool    if the game is in the game over state
+   */
+  public function game_over() {
+    return $this->game_date['gameOver'];
   }
 }
 ?>
