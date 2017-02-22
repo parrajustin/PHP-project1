@@ -31,7 +31,6 @@ if( !isset($_GET['ships']) || strlen($_GET['ships']) === 0) {
 ////////////////////////////
 // SET UP INITAL DATABASE //
 ////////////////////////////
-require_once('../common/flat.php');
 require_once('../common/common.php');
 require_once('ships.php');
 $game = new game();
@@ -131,7 +130,8 @@ foreach ($get_ships as $value) {
     exit();
   }
 
-  $ship_storage[$temp[0]] = array("name" => $temp[0], "col" => $temp[1], "row" => $temp[2], "dir" => $temp[3], "sunk" => 0 ); // add this ship to storage to pass on
+
+  $ship_storage[$temp[0]] = array("name" => $temp[0], "col" => $temp[1], "row" => $temp[2], "dir" => $temp[3], "sunk" => 0, "size" => $game->get_ship_size($temp[0]), ); // add this ship to storage to pass on
   /***********************************************************************************
    *   Here on the unset we are deleting the entry from the ship_names array so that *
    *   we don't place a ship with the same name twice                                *
@@ -199,8 +199,8 @@ $db_game_insert = array(
   "strategy" => $_GET['strategy'],
   "player" => json_encode(array_values($ship_storage)),
   "computer" => json_encode(array_values($comp_ship_storage)),
-  "computer_shots" => json_encode(array()),
-  "player_shots" => json_encode(array()),
+  "computer_shots" => json_encode(array("-1,-1" => 1)),
+  "player_shots" => json_encode(array("-1,-1" => 1)),
   "gameOver" => false,
   "lastShot" => "-1,-1",
 );

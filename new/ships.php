@@ -14,11 +14,6 @@ class Ships {
    *   @var array
    */
   private $settings = null;
-  /**
-   *   Ship size info
-   *   @var array
-   */
-  public $ship_info = array();
 
   /**
    *   Build this ship checker with information from settings
@@ -27,9 +22,6 @@ class Ships {
    */
   public function __construct($data) {
     $this->settings = $data;
-
-    foreach ($data->get_avaliable_ship_array() as $value)
-      $this->ship_info[(string) $value->name] = $value->size;
   }
 
   /**
@@ -49,7 +41,6 @@ class Ships {
    *   @return bool             true if ship is correctly placed
    */
   public function place($ship_name, $ship_info) {
-    $ship_info['size'] = $this->ship_info[$ship_name];
 
     // true for horizontal
     // These statements check if the ship goes out of bounds

@@ -5,17 +5,7 @@
 class Random {
 
 	/**
-	 *   The variable that holds the data for the players ships
-	 *   @var array
-	 */
-	private $player_ships = Null;
-	/**
-	 *   Variable that holds the data for the computer ships
-	 *   @var array
-	 */
-	private $computer_ships = Null;
-	/**
-	 *    Holds the shots fired in a key value pairs with "2,3" => "0,1" where 2 = x, 3 = y and 1 = computer fired here
+	 *    Holds the shots fired in a key value pairs with "2,3" => "1" where 2 = x, 3 = y and 1 = computer fired here
 	 *   @var [type]
 	 */
 	private $shots = Null;
@@ -30,46 +20,37 @@ class Random {
 	 *   Sets up this strategy
 	 *   @method __construct
 	 *   @param  game      $game      the main game object
-	 *   @param  array      $game_arry the specific game array
 	 */
-	public function __construct($game, $game_arry) {
+	public function __construct($game) {
 		$this->game = $game;
-		$this->shots = $game_arry['computer_shots'];
+		$this->shots = $game->get_computer_shots();
 	}
-
-
 
 	/**
 	 *   Returns where the next shot should be fired
 	 *   @method nextShot
-	 *   @return string   x,y coordinates where the computer should fire next
+	 *   @return array   the returned shot where [0] = col, [1] = row
 	 */
-
 	public function nextShot() {
-		$x=rand(1,$game->get_board_size());
-		$y=rand(1,$game->get_board_size());
+
+		$col = rand(1, $this->game->get_board_size());
+		$row = rand(1, $this->game->get_board_size());
 
 		//Check if the coordinates are valid//
-		$isValid=false;
-		while($isValid==false){
-			///First check if the shots array is empty//
-			//If it is add the shot to the array and exit the while//
-			if(empty($this->shots)){
-				$this->shots[$x.",".$y]=1;
-				break;
-			}
-			//If the shot already exist generate a second shot and check again//
-			if(array_key_exists($x.",".$y,$this->shots) ){
-				$x=rand(1,10);
-				$y=rand(1,10);
+		$isValid = false;
+		while($isValid == false){
+			// Check if the shot exists
+			if( $this->game->shot_exists($col, $row, 0) ){
+				$col = rand(1, $this->game->get_board_size());
+				$row = rand(1, $this->game->get_board_size());
 				continue;
 			}
+
 			//If the shot is valid add it to the shots array and exit the while//
-			$isValid=true;
-			$this->shots[$x.",".$y]=1;
+			$isValid = true;
 		}
 
-		return $x.",".$y;
+		return array($col, $row);
 	}
 }
 ?>
