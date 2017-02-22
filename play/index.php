@@ -31,9 +31,9 @@ if( !isset($_GET['pid']) || strlen($_GET['pid']) === 0) { // first check if ther
 ////////////////////////////
 // SET UP INITAL DATABASE //
 ////////////////////////////
-require_once('../common/flat.php');
 require_once('../common/common.php');
 require_once('shot.php');
+require_once('random.php');
 $game = new game(); // game object from common/common
 
 /////////////////////////////
@@ -69,7 +69,7 @@ if( sizeof($shot_break_down) >= 3 || sizeof($shot_break_down) <= 1) { // are the
 $shot_col = intval($shot_break_down[0]); // shot col = x
 $shot_row = intval($shot_break_down[1]); // shot row = y
 
-if( $shot_col <= 0 || $shot_col > $game->get_board_size() || $shot_row <= 0 || $shot_row > $game->get_board_size() ) { // are the shots within the range of the board
+if( $shot_col <= 0 || $shot_col > $game->get_board_size() || $shot_row <= 0 || $shot_row > $game->get_board_size() ) { // is the shot within the range of the board
   echo json_encode(array(
     "response" => false,
     "reason" => "Invalid shot position, $shot_col,$shot_row",
@@ -82,7 +82,8 @@ if( $shot_col <= 0 || $shot_col > $game->get_board_size() || $shot_row <= 0 || $
 ////////////////////////////////////
 $shot_board = new shot_check($game); // setup shot_board checker
 $out_player = $shot_board->check($shot_col, $shot_row, 1); //check if this shot is acceptable and get the data from it
-if( is_null($out) ) { // if null is returned the shot is Invalid
+$out_computer = array();
+if( is_null($out_player) ) { // if null is returned the shot is Invalid
   echo json_encode(array(
     "response" => false,
     "reason" => "Invalid shot position, $shot_col,$shot_row",
@@ -91,5 +92,16 @@ if( is_null($out) ) { // if null is returned the shot is Invalid
 }
 
 if( !$out['isWin'] ) { // if the player didn't win have the computer go through its strategy
+  $strat = new Random($game);
+  $returned_shot = Null;
 
+  while( is_null($out_computer) || sizeof($out_computer) === 0) { // if null is returned the shot is Invalid, emergency mesure
+    $returned_shot = $strat->nextShot();
+    $out_computer = $shot_board->check($returned_shot[0], $returned_shot[1], 0); // check the computer's shot
+  }
 }
+
+echo json_encode(array(
+  "ack_shot" => $out_player,
+  "shot" => $out_computer,
+));

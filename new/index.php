@@ -31,7 +31,6 @@ if( !isset($_GET['ships']) || strlen($_GET['ships']) === 0) {
 ////////////////////////////
 // SET UP INITAL DATABASE //
 ////////////////////////////
-require_once('../common/flat.php');
 require_once('../common/common.php');
 require_once('ships.php');
 $game = new game();

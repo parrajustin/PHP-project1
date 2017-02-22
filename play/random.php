@@ -29,9 +29,8 @@ class Random {
 	/**
 	 *   Returns where the next shot should be fired
 	 *   @method nextShot
-	 *   @return string   x,y coordinates where the computer should fire next
+	 *   @return array   the returned shot where [0] = col, [1] = row
 	 */
-
 	public function nextShot() {
 
 		$col = rand(1, $game->get_board_size());
@@ -51,7 +50,7 @@ class Random {
 			$isValid = true;
 		}
 
-		return $col . "," . $row;
+		return array($col, $row);
 	}
 }
 ?>
