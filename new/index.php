@@ -2,10 +2,10 @@
 <head>
 </head>
 <body>
-  <?php
-  ini_set('display_errors', 1);
-  error_reporting(E_ALL ^ E_NOTICE);
-  ?>
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL ^ E_NOTICE);
+?>
 </body>
 </html>
 
