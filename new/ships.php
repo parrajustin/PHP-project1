@@ -10,7 +10,7 @@ class Ships {
    */
   private $ships = array();
   /**
-   *   settings data
+   *   settings object
    *   @var array
    */
   private $settings = null;
@@ -23,12 +23,12 @@ class Ships {
   /**
    *   Build this ship checker with information from settings
    *   @method __construct
-   *   @param  array      $data settings data
+   *   @param  game      $data settings data
    */
   public function __construct($data) {
     $this->settings = $data;
 
-    foreach ($data['ships'] as $value)
+    foreach ($data->get_avaliable_ship_array() as $value)
       $this->ship_info[(string) $value->name] = $value->size;
   }
 
@@ -53,9 +53,9 @@ class Ships {
 
     // true for horizontal
     // These statements check if the ship goes out of bounds
-    if( $ship_info['dir'] && $ship_info['col'] + $ship_info['size'] - 1 > $this->settings['size'])
+    if( $ship_info['dir'] && $ship_info['col'] + $ship_info['size'] - 1 > $this->settings->get_board_size())
       return false;
-    if( !$ship_info['dir'] && $ship_info['row'] + $ship_info['size'] - 1 > $this->settings['size'])
+    if( !$ship_info['dir'] && $ship_info['row'] + $ship_info['size'] - 1 > $this->settings->get_board_size())
       return false;
 
     ///////////////////////////////////
@@ -64,7 +64,7 @@ class Ships {
     foreach ($this->ships as $value) {
       if( $value['col'] < $ship_info['col'] + ($ship_info['dir']? $ship_info['size']: 1) &&
        $value['col'] + ($value['dir']? $value['size']: 1) > $ship_info['col'] &&
-       $value['row'] < $ship_info['row'] + (!$value['dir']? $value['size']: 1) &&
+       $value['row'] < $ship_info['row'] + (!$ship_info['dir']? $ship_info['size']: 1) &&
        (!$value['dir']? $value['size']: 1) + $value['row'] > $ship_info['row'])
          return false;
     }
