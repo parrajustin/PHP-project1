@@ -33,9 +33,9 @@ class game {
    *   @var array
    */
   private $AVAILABLE_STRATEGIES = array(
-    "Smart",
+    "Sweep",
     "Random",
-    "Sweep"
+    "Under34"
   );
 
   /**
@@ -220,7 +220,7 @@ class game {
   /**
    *   Returns the game strategy
    *   @method get_strategy
-   *   @return [type]       [description]
+   *   @return string       returned strategy
    */
   public function get_strategy() {
     return $this->game_data['strategy'];

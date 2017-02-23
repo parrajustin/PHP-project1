@@ -66,6 +66,26 @@ if( $shot_col <= 0 || $shot_col > $game->get_board_size() || $shot_row <= 0 || $
     "reason" => "Invalid shot position, $shot_col,$shot_row",
   ));
 
+//////////////////////
+// Declare strategy //
+//////////////////////
+require_once('random.php');
+require_once('sweep.php');
+require_once('under34.php');
+$strategy = Null;
+
+switch(strtolower($game->get_strategy())) {
+  case "random":
+    $strategy = new Random($game);
+    break;
+  case "sweep":
+    $strategy = new Sweep($game);
+    break;
+  case "under34":
+    $strategy = new Under($game);
+    break;
+}
+
 ////////////////////////////////////
 // Check if the shot hit anything //
 ////////////////////////////////////
@@ -78,18 +98,20 @@ if( is_null($out_player) ) // if null is returned the shot is Invalid
     "reason" => "Invalid shot position, $shot_col,$shot_row",
   ));
 
+$returneee = array(
+  "response" => true,
+  "ack_shot" => $out_player
+);
+
+
 if( !$out_player['isWin'] ) { // if the player didn't win have the computer go through its strategy
-  $strat = new Under34($game);
   $returned_shot = Null;
 
   while( is_null($out_computer) || sizeof($out_computer) === 0) { // if null is returned the shot is Invalid, emergency mesure
-    $returned_shot = $strat->nextShot();
+    $returned_shot = $strategy->nextShot();
     $out_computer = $shot_board->check($returned_shot[0], $returned_shot[1], 0); // check the computer's shot
   }
+  $returneee["shot"] = $out_computer;
 }
 
-return_statement(array(
-  "response" => true,
-  "ack_shot" => $out_player,
-  "shot" => (is_null($out_computer)? json_decode("{}") : $out_computer),
-));
+return_statement($returneee);

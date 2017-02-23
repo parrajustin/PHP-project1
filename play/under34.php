@@ -2,7 +2,7 @@
 /**
  *   Will sink all the player ships in 34 turns.
 */
-class Under34 {
+class Under {
 
 	/**
 	 *   The variable that holds the data for the players ships
