@@ -9,6 +9,7 @@ function return_statement($array) {
   echo json_encode($array);
   exit();
 }
+// test
 
 /////////////////////////////////////////////////////////////////////
 // Checks to make sure the get for both ships and strategy are set //
