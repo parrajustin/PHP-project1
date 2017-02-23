@@ -3,19 +3,16 @@
  *   Random class, should just shoot at random locations
  */
 class Random {
-
 	/**
 	 *    Holds the shots fired in a key value pairs with "2,3" => "1" where 2 = x, 3 = y and 1 = computer fired here
 	 *   @var [type]
 	 */
 	private $shots = Null;
-
 	/**
 	 *   The game object from common
 	 *   @var game
 	 */
 	private $game = Null;
-
 	/**
 	 *   Sets up this strategy
 	 *   @method __construct

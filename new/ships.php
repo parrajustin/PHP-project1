@@ -5,7 +5,7 @@
  */
 class Ships {
   /**
-   *   Stored ship information has col,row,dir,size
+   *   Stored ship information has col,row,dir,size,sunk
    *   @var array
    */
   private $ships = array();
@@ -44,23 +44,23 @@ class Ships {
 
     // true for horizontal
     // These statements check if the ship goes out of bounds
-    if( $ship_info['dir'] && $ship_info['col'] + $ship_info['size'] - 1 > $this->settings->get_board_size())
+    if( $ship_info['col'] + ($ship_info['dir']? $ship_info['size'] : 1) - 1 > $this->settings->get_board_size())
       return false;
-    if( !$ship_info['dir'] && $ship_info['row'] + $ship_info['size'] - 1 > $this->settings->get_board_size())
+    if( $ship_info['row'] + (!$ship_info['dir']? $ship_info['size'] : 1) - 1 > $this->settings->get_board_size())
       return false;
 
     ///////////////////////////////////
-    // Checks if any boats intersect //
+    // Checks if any ships intersect //
     ///////////////////////////////////
     foreach ($this->ships as $value) {
       if( $value['col'] < $ship_info['col'] + ($ship_info['dir']? $ship_info['size']: 1) &&
        $value['col'] + ($value['dir']? $value['size']: 1) > $ship_info['col'] &&
        $value['row'] < $ship_info['row'] + (!$ship_info['dir']? $ship_info['size']: 1) &&
        (!$value['dir']? $value['size']: 1) + $value['row'] > $ship_info['row'])
-         return false;
+         return false; // will return if any of the ships intersect each other
     }
 
-    $this->ships[] = $ship_info;
+    $this->ships[] = $ship_info; // add the ship info to the stored ship array
     return true;
   }
 }
