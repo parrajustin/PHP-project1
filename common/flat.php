@@ -1,7 +1,8 @@
 <?php
-
-/*  So we can handle exceptions here */
-//class Exception extends \Exception {}
+/**
+ *   @author Justin R. Parra <jrparra2@miners.utep.edu>
+ *   @purpose To handle to low level manipulation of the data that is stored in a flat file format under the data folder
+ */
 
 /** A flat file storage implementation */
 class flat {

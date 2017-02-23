@@ -1,6 +1,13 @@
 
 <?php
 /**
+ *   @author Justin R. Parra <jrparra2@miners.utep.edu>
+ *   @author Sebastian A. Urtaza <Sayalaurtaza@miners.utep.edu>
+ *   @author Luis Romero <>
+ *   @purpose this is the implementation of the play api, it first checks if the shot provided by the player is valid then it replys by using the computer strategies
+ */
+
+/**
  *   Handles the echoing of data
  *   @method return_statement
  *   @param  array           $array the array to echo out

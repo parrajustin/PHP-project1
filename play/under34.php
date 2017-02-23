@@ -1,5 +1,11 @@
 <?php
 /**
+ *   @author Sebastian A. Urtaza <Sayalaurtaza@miners.utep.edu>
+ *   @author Luis Romero <>
+ *   @purpose strategy that has the computer winning in 34 turns
+ */
+
+/**
  *   Will sink all the player ships in 34 turns.
 */
 class Under {
@@ -24,7 +30,7 @@ class Under {
 	/**
 	 *   Sets up this under34 class
 	 *   @method __construct
-	 *   @param  array      $game_arry the data from the current game
+	 *   @param  array      $game the data from the current game
 	 */
 	public function __construct($game) {
 		$this->game = $game;
@@ -117,6 +123,14 @@ class Under {
 		return $this->hitShot();
 	}
 
+	/**
+	 *   Check if a shot his a boat
+	 *   @method shot_collision
+	 *   @param  array         $rect1    the array containing the information of the boat
+	 *   @param  int         $shot_col the column of the shot
+	 *   @param  int         $shot_row the row of the shot
+	 *   @return bool                   true of the shot hits the boat
+	 */
 	private function shot_collision($rect1, $shot_col, $shot_row) {
 		if ($shot_col < $rect1['col'] + ($rect1['dir']? $rect1['size']: 1) &&
 				$shot_col + 1 > $rect1['col'] &&

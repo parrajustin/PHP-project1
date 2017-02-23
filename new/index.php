@@ -1,5 +1,12 @@
 <?php
 /**
+ *   @author Justin R. Parra <jrparra2@miners.utep.edu>
+ *   @author Sebastian A. Urtaza <Sayalaurtaza@miners.utep.edu>
+ *   @author Luis Romero <>
+ *   @purpose this is the implementation of the new api, it first checks the validity of the inputs; then it creates the game and returns the game pid
+ */
+
+/**
  *   Handles the echoing of data
  *   @method return_statement
  *   @param  array           $array the array to echo out
@@ -31,7 +38,7 @@ require_once('ships.php');
 $game = new game();
 
 /**
- *   Keeps track of the avaliable ships that can be places
+ *   Keeps track of the avaliable ships that can be placed
  *   @var array
  */
 $ship_names = $game->get_ship_names();

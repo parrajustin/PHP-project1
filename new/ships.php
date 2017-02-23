@@ -1,4 +1,9 @@
 <?php
+/**
+ *   @author Justin R. Parra <jrparra2@miners.utep.edu>
+ *   @author Luis Romero <>
+ *   @purpose class that is used to check a ships vladility in a faster way, only checking against other valid ships
+ */
 
 /**
  *   Checks the placement of the ships

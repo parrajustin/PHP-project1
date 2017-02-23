@@ -1,5 +1,12 @@
 
 <?php
+/**
+ *   @author Justin R. Parra <jrparra2@miners.utep.edu>
+ *   @author Sebastian A. Urtaza <Sayalaurtaza@miners.utep.edu>
+ *   @author Luis Romero <>
+ *   @purpose this is a simple implementation of the info api
+ */
+
 // SETUP DATABASE
 require_once('../common/common.php');
 $game = new game();

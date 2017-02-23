@@ -1,4 +1,12 @@
 <?php
+/**
+ *   @author Justin R. Parra <jrparra2@miners.utep.edu>
+ *   @purpose a Layer above flat.php that makes it easier to use flat.php, it is also used to ensure the default datbases exist
+ */
+
+/**
+ *   ignore this...
+ */
 require_once('../common/flat.php');
 
 /** The class that gives access to the underlying needs of the game */
