@@ -3,7 +3,6 @@
  *   Will sink all the player ships in 34 turns.
 */
 class Under34 {
-
 	/**
 	 *   The variable that holds the data for the players ships
 	 *   @var array
@@ -11,7 +10,7 @@ class Under34 {
 	private $player_ships = Null;
 
 	/**
-	 *    Holds the shots fired in a key value pairs with "2,3" => "0,1" where 2 = x, 3 = y and 1 = computer fired here
+	 *    Holds the shots fired in a key value pairs with "2,3" => "1" where 2 = x, 3 = y and 1 = computer fired here
 	 *   @var [type]
 	 */
 	private $shots = Null;
