@@ -1,21 +1,27 @@
 <?php
+/**
+ *   Handles the echoing of data
+ *   @method return_statement
+ *   @param  array           $array the array to echo out
+ */
+function return_statement($array) {
+  echo json_encode($array);
+  exit();
+}
 
 /////////////////////////////////////////////////////////////////////
 // Checks to make sure the get for both ships and strategy are set //
 /////////////////////////////////////////////////////////////////////
-if( !isset($_GET['ships']) || strlen($_GET['ships']) === 0) {
-  echo json_encode(array(
+if( !isset($_GET['ships']) || strlen($_GET['ships']) === 0) // are the ships set and is there something there?
+  return_statement(array(
     "response" => false,
     "reason" => "No ships specified",
   ));
-  exit();
-} else if( !isset($_GET['strategy']) || strlen($_GET['strategy']) === 0) {
-  echo json_encode(array(
+else if( !isset($_GET['strategy']) || strlen($_GET['strategy']) === 0) // is there a strategy set?
+  return_statement(array(
     "response" => false,
     "reason" => "Strategy not specified",
   ));
-  exit();
-}
 
 ////////////////////////////
 // SET UP INITAL DATABASE //
@@ -33,25 +39,21 @@ $ship_names = $game->get_ship_names();
 ////////////////////////////////////////////////////////
 // Does the strategy specified in the _GET even exist //
 ////////////////////////////////////////////////////////
-if( !in_array($_GET['strategy'], $game->get_avaliable_strategies()) ) {
-  echo json_encode(array(
+if( !in_array($_GET['strategy'], $game->get_avaliable_strategies()) ) // is the strategy specified one of the avaliable strategies
+  return_statement(array(
     "response" => false,
     "reason" => "Unknown strategy",
   ));
-  exit();
-}
 
 /////////////////////////////////////////////////
 // are there even the correct number of ships? //
 /////////////////////////////////////////////////
 $get_ships = explode(';', $_GET['ships']);
-if( sizeof($get_ships) != sizeof($game->get_avaliable_ship_array()) ) { // are there the correct number of ships
-  echo json_encode(array(
+if( sizeof($get_ships) != sizeof($game->get_avaliable_ship_array()) ) // are there the correct number of ships
+  return_statement(array(
     "response" => false,
     "reason" => "Ship deployment not well-formed, Not the correct amount of ships",
   ));
-  exit();
-}
 
 /**
  *   Contains the player defined ships, used to store into database
@@ -67,13 +69,11 @@ $ship_storage = array();
  ***********************************************************************************************/
 foreach ($get_ships as $value) {
   $temp = explode(',', $value); // exploded value of the ship statement, each statement is separted by a  ;
-  if( sizeof($temp) != 4 ) { // does each ship statment have the correct number of variables name,x,y,dir
-    echo json_encode(array(
+  if( sizeof($temp) != 4 ) // does each ship statment have the correct number of variables name,x,y,dir
+    return_statement(array(
       "response" => false,
       "reason" => "Ship deployment not well-formed, incorrect number of statements",
     ));
-    exit();
-  }
 
   // replace all + in a ship name with a space since htlm doesn't let you send spaces over urls
   str_replace("+", " ", $temp[0]);
@@ -83,41 +83,36 @@ foreach ($get_ships as $value) {
   //////////////////////////////////////////////////////////////////
   // We need to make sure that each of the statements are correct //
   //////////////////////////////////////////////////////////////////
-  if( !in_array($temp[0], $ship_names) ) { // Does this ship name exist? check it against the name from the $ship_names array
-    echo json_encode(array(
+  if( !in_array($temp[0], $ship_names) ) // Does this ship name exist? check it against the name from the $ship_names array
+    return_statement(array(
       "response" => false,
       "reason" => "Unknown or Duplicate ship name, $temp[0]",
     ));
-    exit();
-  }
+
   // is the x cord a number within the range
-  if( $temp[1] < 1 || $temp[1] > $game->get_board_size() ) {
-    echo json_encode(array(
+  if( $temp[1] < 1 || $temp[1] > $game->get_board_size() )
+    return_statement(array(
       "response" => false,
       "reason" => "Invalid ship x position, $temp[1]",
     ));
-    exit();
-  }
+
   // is the y cord a number within the range
-  if( $temp[2] < 1 || $temp[2] > $game->get_board_size() ) {
-    echo json_encode(array(
+  if( $temp[2] < 1 || $temp[2] > $game->get_board_size() )
+    return_statement(array(
       "response" => false,
       "reason" => "Invalid ship y position, $temp[2]",
     ));
-    exit();
-  }
+
   // is the dir either "true" or "false"
   if( strtolower($temp[3]) === "false" )
     $temp[3] = false;
   else if( strtolower($temp[3]) === "true" )
     $temp[3] = true;
-  else {
-    echo json_encode(array(
+  else
+    return_statement(array(
       "response" => false,
       "reason" => "Invalid ship direction, $temp[3]",
     ));
-    exit();
-  }
 
 
   $ship_storage[$temp[0]] = array("name" => $temp[0], "col" => $temp[1], "row" => $temp[2], "dir" => $temp[3], "sunk" => 0, "size" => $game->get_ship_size($temp[0]), ); // add this ship to storage to pass on
@@ -133,13 +128,11 @@ foreach ($get_ships as $value) {
 /////////////////////////////////////////////////////////////////////
 $ship_checker = new Ships($game);
 foreach ($ship_storage as $key => $value) {
-  if( !$ship_checker->place($key, $value) ) { // if any do intersect or go out of bounds return an error
-    echo json_encode(array(
+  if( !$ship_checker->place($key, $value) ) // if any do intersect or go out of bounds return an error
+    return_statement(array(
       "response" => false,
       "reason" => "Invalid Ship deployments, $key",
     ));
-    exit();
-  }
 }
 
 //////////////////
@@ -199,7 +192,7 @@ $game->insert_game($db_game_insert); // insert this game into the database
 //////////////////////////////////////////
 // finally return the accepted response //
 //////////////////////////////////////////
-echo json_encode(array(
+return_statement(array(
   "response" => true,
   "pid" => $pid,
 ));

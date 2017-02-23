@@ -20,11 +20,6 @@ class flat {
    *   @var array
    */
   private $meta_data = array(); // contains the metadata for all operated tables
-  /**
-   *   What can be returned
-   *   @var array
-   */
-  private $returnable = array();
 
   /**
    *   Creates the flat file database
@@ -38,7 +33,7 @@ class flat {
     //Can the directory even exist?
     if( !is_dir($this->dir) ) {
       if( !mkdir($this->dir, 0744, true) )
-        throw new Exception('Failed to make directory, permission failed');
+        throw new Exception('Failed to make directory');
       else
         file_put_contents($this->dir . 'index.php', "<?php"); // add an index.php so that the database can't be indexed
     }
@@ -55,7 +50,7 @@ class flat {
       return NULL;
 
     $this->table = $table_name;
-    return $this;
+    return $this; // makes this chainable
   }
 
   /**
@@ -90,7 +85,7 @@ class flat {
     $table = $this->table; // quick way to access the table
     $id = 0; // the id of the insert
     $meta = null; // data of the table, holds count and id and indexes
-    $update_keys = 0;
+    $update_keys = 0; // do we have to update the keys array, only need to be done on new tables
 
     if( !is_dir($this->dir . $table) ) { // does this table even exist?
       if( !mkdir($this->dir . $table, 0777) )
@@ -140,8 +135,6 @@ class flat {
     $this->meta_data[$table] = $meta;
     $this->write($this->dir . $table . '/meta.php', $meta);
 
-    $returnable['bool'] = 1;
-    $returnable['selector'] = strval($id); // make it so that this is the selcted object
     return $this; // continue chainability
   }
 
