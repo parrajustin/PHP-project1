@@ -3,6 +3,7 @@
  *   Will sink all the player ships in 34 turns.
 */
 class Under34 {
+
 	/**
 	 *   The variable that holds the data for the players ships
 	 *   @var array
@@ -75,7 +76,7 @@ class Under34 {
 		//Check if the coordinates are valid//
 		$isValid=false;
 		while($isValid==false){
-				
+
 			//If the generated shot already exist or it can hit a ship generate a second shot and check again//
 			if( $this->game->shot_exists($col, $row, 0) ){
 				$col = rand(1, $this->game->get_board_size());
@@ -90,7 +91,7 @@ class Under34 {
 				}
 			}
 			$isValid=true;
-				
+
 		}
 		return array($col, $row);
 	}

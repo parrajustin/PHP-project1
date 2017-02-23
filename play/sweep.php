@@ -3,6 +3,7 @@
  *   Sweep class, should just shoot in a sweeping pattern
 */
 class Sweep {
+
 	/**
 	 *    Holds the shots fired in a key value pairs with "2,3" => "1" where 2 = x, 3 = y and 1 = computer fired here
 	 *   @var [type]
