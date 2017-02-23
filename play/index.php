@@ -30,7 +30,7 @@ else if( !isset($_GET['shot']) || strlen($_GET['shot']) <= 2)// was there a get 
 ////////////////////////////
 require_once('../common/common.php');
 require_once('shot.php');
-require_once('random.php');
+require_once('under34.php');
 $game = new game(); // game object from common/common
 
 /////////////////////////////
@@ -79,7 +79,7 @@ if( is_null($out_player) ) // if null is returned the shot is Invalid
   ));
 
 if( !$out_player['isWin'] ) { // if the player didn't win have the computer go through its strategy
-  $strat = new Random($game);
+  $strat = new Under34($game);
   $returned_shot = Null;
 
   while( is_null($out_computer) || sizeof($out_computer) === 0) { // if null is returned the shot is Invalid, emergency mesure
