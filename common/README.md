@@ -9,7 +9,7 @@ This file explains the files contined in this folder
 - Only contains the necessary method needed to make this battleship api work
 
 The flat file class "flat" contains the following methods
-'''php
+``` php
   public function doc($table_name);
   public function count();
   public function insert($input);
@@ -19,14 +19,14 @@ The flat file class "flat" contains the following methods
   private function write($path, $obj);
   public function meta();
   public function update($id, $field, $array);
-'''
+```
 
 ## common.php
 - Handles the underlying work needed for the battleship api to work
 - The purpose of this file is to make it easier to access the stored files for the game, such as ship info, board size, ship locations ... etc
 
 The class contained within is called "game" and it contains the following methods
-'''php
+``` php
   public function get_board_size();
   public function get_avaliable_strategies();
   public function get_avaliable_ship_array();
@@ -45,4 +45,4 @@ The class contained within is called "game" and it contains the following method
   public function shot_exists($col, $row, $is_player);
   public function game_over();
   public function update_game($pid, $array);
-'''
+```

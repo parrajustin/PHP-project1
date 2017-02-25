@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Used for prototyping on a linux machine
 
 echo "Do you wish to install this program?"
 select yn in "setup" "start" "stop" "delete"; do

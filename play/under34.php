@@ -1,7 +1,7 @@
 <?php
 /**
  *   @author Sebastian A. Urtaza <Sayalaurtaza@miners.utep.edu>
- *   @author Luis Romero <>
+ *   @author Luis Romero <Lgromero2@miners.utep.edu>
  *   @purpose strategy that has the computer winning in 34 turns
  */
 

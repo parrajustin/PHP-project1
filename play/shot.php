@@ -2,7 +2,6 @@
 /**
  *   @author Justin R. Parra <jrparra2@miners.utep.edu>
  *   @author Sebastian A. Urtaza <Sayalaurtaza@miners.utep.edu>
- *   @author Luis Romero <>
  *   @purpose This class checks a shot then returns the information that is necessary to return to the client
  */
 

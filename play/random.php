@@ -1,7 +1,6 @@
 <?php
 /**
  *   @author Sebastian A. Urtaza <Sayalaurtaza@miners.utep.edu>
- *   @author Justin R. Parra <jrparra2@miners.utep.edu>
  *   @purpose simple strategy that places shots randomly
  */
 

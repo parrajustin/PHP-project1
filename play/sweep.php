@@ -1,7 +1,7 @@
 <?php
 /**
  *   @author Sebastian A. Urtaza <Sayalaurtaza@miners.utep.edu>
- *   @author Luis Romero <>
+ *   @author Luis Romero <Lgromero2@miners.utep.edu>
  *   @purpose strategy that places shots that sweep the board, or goes from the top left corner to the bottom corner
  */
 

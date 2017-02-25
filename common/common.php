@@ -213,6 +213,10 @@ class game {
     $this->pid = $pid;
     $game_data = $this->database->find($_GET['pid'], 'pid');
 
+    if( sizeof($game_data) == 0 ) {
+      return Null;
+    }
+
     $game_data['player'] = json_decode($game_data['player'], True);
     $game_data['computer'] = json_decode($game_data['computer'], True);
     $game_data['computer_shots'] = json_decode($game_data['computer_shots'], True);
@@ -220,8 +224,6 @@ class game {
 
     $this->game_data = $game_data;
 
-    if( sizeof($game_data) == 0 )
-      return Null;
     return true;
   }
 

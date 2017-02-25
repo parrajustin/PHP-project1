@@ -3,7 +3,7 @@
 /**
  *   @author Justin R. Parra <jrparra2@miners.utep.edu>
  *   @author Sebastian A. Urtaza <Sayalaurtaza@miners.utep.edu>
- *   @author Luis Romero <>
+ *   @author Luis Romero <Lgromero2@miners.utep.edu>
  *   @purpose this is a simple implementation of the info api
  */
 
